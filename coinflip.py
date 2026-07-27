@@ -1,18 +1,29 @@
 import discord
+from dotenv import load_dotenv
+import os
+import random
 
-intents = discord.Intents.default()
-intents.message_content = True
+# load environment variables
+load_dotenv()
+bot = discord.Bot()
 
-client = discord.Client(intents=intents)
+coinflips = bot.create_group("coins", "flip coins")
 
-# retrieve bot token form file
-f = open("token.txt")
-token = f.read()
-f.close()
-
-@client.event
+@bot.event
 async def on_ready():
-    print(f'Logged in as {client.user}')
+    print(f'Logged in as {bot.user}')
 
-# place a bot token here
-client.run(token)
+coins = ["Heads", "Tails"]
+
+@coinflips.command(description="Flip a coin")
+async def flip(ctx: discord.ApplicationContext):
+    res = random.choice(coins)
+    embed = discord.Embed(title=res)
+    await ctx.respond(embed=embed)
+
+@coinflips.command(description="Flip multiple coins")
+async def flipmore(ctx: discord.ApplicationContext):
+    await ctx.respond("")
+
+# run bot with bot token
+bot.run(os.getenv("TOKEN"))
