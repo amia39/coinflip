@@ -33,5 +33,12 @@ async def flipmore(ctx: discord.ApplicationContext, num: int):
         embed = discord.Embed(title=f'Heads: {res}, Tails: {num - res}')
     await ctx.respond(embed=embed)
 
+@diceroll.command(description="Roll a die")
+async def roll(ctx: discord.ApplicationContext, sides: int):
+    embed = discord.Embed(title="Invalid number of sides", description="Enter at least 2 (Max: 99999)")
+    if 1 < sides < 100000:
+        embed = discord.Embed(title=f'Result: {random.randint(1, sides)}')
+    await ctx.respond(embed=embed)
+
 # run bot with bot token
 bot.run(os.getenv("TOKEN"))
